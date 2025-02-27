@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; }
+        #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+        .user { color: black; font-weight: bold; }
+        .ai { color: blue; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Ollama AI Chat</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="userInput" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const chatbox = document.getElementById("chatbox");
+
+        async function sendMessage() {
+            const inputField = document.getElementById("userInput");
+            const userText = inputField.value.trim();
+            if (!userText) return;
+
+            chatbox.innerHTML += `<div class="user">You: ${userText}</div>`;
+            inputField.value = "";
+
+            try {
+                const response = await fetch("http://YOUR_SERVER_IP:5000/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: userText })
+                });
+                const data = await response.json();
+                chatbox.innerHTML += `<div class="ai">AI: ${data.response}</div>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            } catch (error) {
+                chatbox.innerHTML += `<div class="ai">Error: Could not connect to AI</div>`;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
