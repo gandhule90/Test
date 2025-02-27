@@ -29,7 +29,7 @@
             inputField.value = "";
 
             try {
-                const response = await fetch("http://YOUR_SERVER_IP:5000/ask", {
+                const response = await fetch("http://192.168.1.5:5000/ask", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ question: userText })
